@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hockey Stats — Teams</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+</head>
+<body class="bg-white text-gray-900">
+ 
+  <header class="bg-[#F9E76D] text-black">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold">Hockey Stats</h1>
+      <nav>
+        <ul class="flex space-x-6 text-sm font-medium">
+          <li><a href="/" class="hover:underline">Home</a></li>
+          <li><a href="/games" class="hover:underline">Games</a></li>
+          <li><a href="/teams" class="hover:underline font-semibold underline">Teams</a></li>
+          <li><a href="/players" class="hover:underline">Players</a></li>
+          <li><a href="/insights" class="hover:underline">Insights</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  
+  <div class="h-16 bg-white"></div>
+
+  
+  <main class="max-w-6xl mx-auto px-4 flex gap-8">
+  
+    <section class="w-2/3">
+      <h2 class="text-xl font-semibold mb-4">Team Statistics — NHL 2021/2022</h2>
+      <table class="w-full text-sm text-left">
+        <thead class="bg-[#F9E76D] text-xs uppercase text-gray-600">
+          <tr>
+            <th class="py-2 px-2">Team</th>
+            <th class="py-2 px-2 text-center sortable">GP</th>
+            <th class="py-2 px-2 text-center sortable">W</th>
+            <th class="py-2 px-2 text-center sortable">L</th>
+            <th class="py-2 px-2 text-center sortable">T</th>
+            <th class="py-2 px-2 text-center sortable">GF/GA</th>
+            <th class="py-2 px-2 text-center sortable">SOG/SOGA</th>
+            <th class="py-2 px-2 text-center sortable">FO%</th>
+            <th class="py-2 px-2 text-center sortable">PP%</th>
+            <th class="py-2 px-2 text-center sortable">PIM</th>
+            <th class="py-2 px-2 text-center sortable">Hits</th>
+            <th class="py-2 px-2 text-center sortable">Blocks</th>
+          </tr>
+        </thead>
+                    <tbody>
+        {% for team in teams %}
+        <tr onclick="window.location.href='/team/{{ team.abbr }}'" class="hover:bg-yellow-50 cursor-pointer leading-relaxed group">
+          <td class="py-1 px-2 font-semibold"><span class="group-hover:underline">{{ team.name }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.games_played }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.wins }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.losses }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.ties }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.goals_for }}/{{ team.goals_against }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.sog_for }}/{{ team.sog_against }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.faceoff_pct }}%</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.pp_pct }}%</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.pim }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.hits }}</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.blocks }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      </table>
+    </section>
+
+  
+    <aside class="w-1/3 bg-gray-50 border border-gray-200 rounded-xl p-4 shadow">
+      <h2 class="text-xl font-semibold mb-4">Top Teams — Summary</h2>
+      <div class="text-gray-700 text-sm">
+        <p class="mb-2">Top-3 by Wins</p>
+        <ul class="list-disc ml-5">
+          {% for team in top_wins %}
+          <li>{{ team.name }} — {{ team.wins }} W</li>
+          {% endfor %}
+        </ul>
+
+        <p class="mt-4 mb-2">Top-3 by GF/GA Diff</p>
+        <ul class="list-disc ml-5">
+          {% for team in top_goal_diff %}
+          <li>{{ team.name }} — {{ team.goal_diff }}</li>
+          {% endfor %}
+        </ul>
+
+        <p class="mt-4 mb-2">Top-3 by Faceoff %</p>
+        <ul class="list-disc ml-5">
+          {% for team in top_faceoff %}
+          <li>{{ team.name }} — {{ team.faceoff_pct }}%</li>
+          {% endfor %}
+        </ul>
+
+        <p class="mt-4 mb-2">Top-3 by Powerplay %</p>
+        <ul class="list-disc ml-5">
+          {% for team in top_powerplay %}
+          <li>{{ team.name }} — {{ team.pp_pct }}%</li>
+          {% endfor %}
+        </ul>
+
+        <p class="mt-4 mb-2">Top-3 by Hits</p>
+        <ul class="list-disc ml-5">
+          {% for team in top_hits %}
+          <li>{{ team.name }} — {{ team.hits }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </aside>
+
+  </main>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll("th.sortable").forEach(function (header, index) {
+    header.addEventListener("click", function () {
+      const table = header.closest("table");
+      const tbody = table.querySelector("tbody");
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+      const isAsc = header.classList.contains("asc");
+
+      function parseCell(td) {
+        const text = td.querySelector('span')?.textContent.trim() || td.textContent.trim();
+        if (text.includes('/')) {
+          return parseFloat(text.split('/')[0]) || 0;
+        }
+        if (text.includes('%')) {
+          return parseFloat(text.replace('%', '')) || 0;
+        }
+        return parseFloat(text) || 0;
+      }
+
+      rows.sort(function (a, b) {
+        const aVal = parseCell(a.children[index]);
+        const bVal = parseCell(b.children[index]);
+        return isAsc ? aVal - bVal : bVal - aVal;
+      });
+
+      rows.forEach(row => tbody.appendChild(row));
+
+      table.querySelectorAll("th").forEach(th => th.classList.remove("asc", "desc"));
+      header.classList.toggle("asc", !isAsc);
+      header.classList.toggle("desc", isAsc);
+    });
+  });
+});
+</script>
+</body>
+</html>
