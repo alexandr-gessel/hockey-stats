@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hockey Stats — Insights</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900">
+  <!-- Navigation Bar -->
+  <header class="bg-[#F9E76D] text-black">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold">Hockey Stats</h1>
+      <nav>
+        <ul class="flex space-x-6 text-sm font-medium">
+          <li><a href="/" class="hover:underline">Home</a></li>
+          <li><a href="/games" class="hover:underline">Games</a></li>
+          <li><a href="/teams" class="hover:underline">Teams</a></li>
+          <li><a href="/players" class="hover:underline">Players</a></li>
+          <li><a href="/insights" class="hover:underline font-semibold underline">Insights</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Spacer -->
+  <div class="h-16 bg-white"></div>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 flex gap-8">
+    <!-- Upset Stats Section -->
+    <section class="w-2/3">
+      <h2 class="text-xl font-semibold mb-4">Upset Leaders — Top 7</h2>
+
+      <table class="table-auto w-full border text-sm">
+        <thead>
+          <tr>
+            <th class="border px-4 py-2">Team</th>
+            <th class="border px-4 py-2">Games</th>
+            <th class="border px-4 py-2">Upsets</th>
+            <th class="border px-4 py-2">Upset %</th>
+            <th class="border px-4 py-2">Playoff</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for team in upsets %}
+          <tr class="hover:bg-yellow-50 transition">
+            <td class="border px-4 py-2">{{ team.team }}</td>
+            <td class="border px-4 py-2 text-center">{{ team.games_played }}</td>
+            <td class="border px-4 py-2 text-center">{{ team.upsets }}</td>
+            <td class="border px-4 py-2 text-center">{{ team.upset_rate }}%</td>
+            <td class="border px-4 py-2 text-center">
+              {% if team.playoff %}
+                <span class="text-green-600 font-semibold">✔️</span>
+              {% else %}
+                <span class="text-gray-400">—</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <div class="h-6 bg-white"></div>
+      <h1 class="text-xl font-bold mb-4">Home Upset Leaders — Top 7</h1>
+
+<table class="table-auto w-full border text-sm">
+    <thead>
+        <tr>
+            <th class="border px-4 py-2">Team</th>
+            <th class="border px-4 py-2">Home Games</th>
+            <th class="border px-4 py-2">Home Upsets</th>
+            <th class="border px-4 py-2">Upset %</th>
+            <th class="border px-4 py-2">Playoff</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for team in home_upsets %}
+        <tr>
+            <td class="border px-4 py-2">{{ team.team }}</td>
+            <td class="border px-4 py-2 text-center">{{ team.home_games_played }}</td>
+            <td class="border px-4 py-2 text-center">{{ team.home_upsets }}</td>
+            <td class="border px-4 py-2 text-center">{{ team.home_upset_rate }}%</td>
+            <td class="border px-4 py-2 text-center">
+                {% if team.playoff %}
+                    <span class="text-green-600 font-semibold">✔️</span>
+                {% else %}
+                    <span class="text-gray-400">—</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="h-6 bg-white"></div>
+<h1 class="text-2xl font-bold mb-4">Summary Table — All Teams</h1>
+
+<table class="table-auto w-full border text-xs">
+    <thead>
+        <tr>
+            <th class="border px-2 py-1">Team</th>
+            <th class="border px-2 py-1">Games</th>
+            <th class="border px-2 py-1">Upsets</th>
+            <th class="border px-2 py-1">Upset %</th>
+            <th class="border px-2 py-1">Home Games</th>
+            <th class="border px-2 py-1">Home Upsets</th>
+            <th class="border px-2 py-1">Home Upset %</th>
+            <th class="border px-2 py-1">Playoff</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for team in summary_table %}
+        <tr>
+            <td class="border px-2 py-1">{{ team.team }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.games_played }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.upsets }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.upset_rate }}%</td>
+            <td class="border px-2 py-1 text-center">{{ team.home_games_played }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.home_upsets }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.home_upset_rate }}%</td>
+            <td class="border px-2 py-1 text-center">
+                {% if team.playoff %}
+                    <span class="text-green-600 font-semibold">✔️</span>
+                {% else %}
+                    <span class="text-gray-400">—</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="h-6 bg-white"></div>
+<h1 class="text-2xl font-bold mb-4">Upsets by Stage — All Teams</h1>
+
+<table class="table-auto w-full border text-xs">
+    <thead>
+        <tr>
+            <th class="border px-2 py-1">Team</th>
+            <th class="border px-2 py-1">Preseason Games</th>
+            <th class="border px-2 py-1">Preseason Upsets</th>
+            <th class="border px-2 py-1">Preseason %</th>
+            <th class="border px-2 py-1">Regular Games</th>
+            <th class="border px-2 py-1">Regular Upsets</th>
+            <th class="border px-2 py-1">Regular %</th>
+            <th class="border px-2 py-1">Playoff Games</th>
+            <th class="border px-2 py-1">Playoff Upsets</th>
+            <th class="border px-2 py-1">Playoff %</th>
+            <th class="border px-2 py-1">Playoff Status</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for team in stage_upsets %}
+        <tr>
+            <td class="border px-2 py-1">{{ team.team }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.preseason_games }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.preseason_upsets }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.preseason_rate }}%</td>
+
+            <td class="border px-2 py-1 text-center">{{ team.regular_games }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.regular_upsets }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.regular_rate }}%</td>
+
+            <td class="border px-2 py-1 text-center">{{ team.playoff_games }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.playoff_upsets }}</td>
+            <td class="border px-2 py-1 text-center">{{ team.playoff_rate }}%</td>
+
+            <td class="border px-2 py-1 text-center">
+                {% if team.playoff %}
+                    <span class="text-green-600 font-semibold">✔️</span>
+                {% else %}
+                    <span class="text-gray-400">—</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="h-6 bg-white"></div>
+<h1 class="text-2xl font-bold mb-4">Longest Upset Streaks — All Teams</h1>
+
+<table class="table-auto w-full border text-sm">
+    <thead>
+        <tr>
+            <th class="border px-4 py-2">Team</th>
+            <th class="border px-4 py-2">Max Upset Streak</th>
+            <th class="border px-4 py-2">Playoff</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for team in upset_streaks %}
+        <tr>
+            <td class="border px-4 py-2">{{ team.team }}</td>
+            <td class="border px-4 py-2 text-center">{{ team.max_upset_streak }}</td>
+            <td class="border px-4 py-2 text-center">
+                {% if team.playoff %}
+                    <span class="text-green-600 font-semibold">✔️</span>
+                {% else %}
+                    <span class="text-gray-400">—</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="h-16 bg-white"></div>
+
+    </section>
+
+    <!-- Right Column -->
+    <aside class="w-1/3">
+      <h2 class="text-xl font-semibold mb-4">Test Stats</h2>
+      <div class="text-gray-600 text-sm">
+        <!-- Placeholder for future stats or charts -->
+        <p>Content coming soon...</p>
+      </div>
+    </aside>
+  </main>
+</body>
+</html>

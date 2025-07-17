@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ team.name }} — Hockey Stats</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900">
+  <header class="bg-[#F9E76D] text-black">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold">Hockey Stats</h1>
+      <nav>
+        <ul class="flex space-x-6 text-sm font-medium">
+          <li><a href="/" class="hover:underline">Home</a></li>
+          <li><a href="/games" class="hover:underline">Games</a></li>
+          <li><a href="/teams" class="hover:underline">Teams</a></li>
+          <li><a href="/players" class="hover:underline">Players</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="h-16 bg-white"></div>
+
+  <main class="max-w-6xl mx-auto px-4 flex gap-8">
+    <section class="w-2/3 px-4">
+  <h2 class="text-xl font-semibold mb-4">{{ team.name }} ({{ team.abbrev }}) — NHL 2021/2022 Team Overview</h2>
+     <div class="flex items-center mb-4 text-gray-700 text-sm">
+      <span class="mr-4"><strong>Abbreviation:</strong> {{ team.abbrev }}</span>
+      <span class="mr-4"><strong>Division:</strong> {{ team.division|capitalize }}</span>
+      <span><strong>Conference:</strong> {{ team.conference|capitalize }}</span>
+    </div>
+
+  <h2 class="text-xl font-semibold mb-2">I. Апсеты</h2>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Апсеты команды {{ team.name }}</h3>
+    <p>Победы в статусе аутсайдера: <strong>{{ num_upsets }}</strong></p>
+    <p>Всего сыгранных матчей: <strong>{{ total_games }}</strong></p>
+    <p>Доля апсетов: <strong>{{ upset_share }}%</strong></p>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Апсеты по стадиям сезона</h3>
+    <table class="table-auto border-collapse border border-gray-400 text-sm">
+      <thead>
+        <tr>
+          <th class="border p-1">Стадия</th>
+          <th class="border p-1">Всего игр</th>
+          <th class="border p-1">Апсетов</th>
+          <th class="border p-1">Доля апсетов (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stage in stage_stats.stages %}
+        <tr>
+          <td class="border p-1">{{ stage|capitalize }}</td>
+          <td class="border p-1">{{ stage_stats.totals[stage] }}</td>
+          <td class="border p-1">{{ stage_stats.upsets.get(stage, 0) }}</td>
+          <td class="border p-1">
+            {% set total = stage_stats.totals[stage] %}
+            {% set upsets = stage_stats.upsets.get(stage, 0) %}
+            {{ ((upsets / total) * 100) | round(2) if total > 0 else 0 }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Средний коэффициент победивших аутсайдеров</h3>
+    <p>Среднее значение коэффициента в матчах-апсетах: <strong>{{ avg_upset_quote }}</strong></p>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Победы в статусе аутсайдера с высоким коэффициентом</h3>
+    <p>Игр с коэффициентом выше 2.50: <strong>{{ threshold_total }}</strong></p>
+    <p>Побед в этих матчах: <strong>{{ threshold_upsets }}</strong></p>
+    <p>Доля побед: <strong>{{ threshold_share }}%</strong></p>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Неожиданные домашние поражения в роли фаворита</h3>
+    <p>Домашних игр: <strong>{{ total_home_games }}</strong></p>
+    <p>Поражений в роли фаворита: <strong>{{ home_fav_losses }}</strong></p>
+    <p>Доля таких поражений: <strong>{{ home_loss_share }}%</strong></p>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">II. Ничьи и исходы в дополнительное время</h2>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Игры, завершившиеся вничью в основное время</h3>
+    <p>Всего игр: <strong>{{ total_games_draw }}</strong></p>
+    <p>Игр с ничьей в основное время: <strong>{{ games_with_draw }}</strong></p>
+    <p>Доля ничьих: <strong>{{ draw_share }}%</strong></p>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Победы в статусе аутсайдера в ОТ и по буллитам</h3>
+    <p>Игр, где команда была аутсайдером: <strong>{{ total_as_underdog }}</strong></p>
+    <p>Побед в ОТ/буллитах среди них: <strong>{{ wins_in_overtime }}</strong></p>
+    <p>Доля таких побед: <strong>{{ overtime_upset_share }}%</strong></p>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Поражения фаворита в ОТ и по буллитам</h3>
+    <p>Игр, где команда была фаворитом: <strong>{{ total_as_favorite }}</strong></p>
+    <p>Поражений в ОТ/буллитах среди них: <strong>{{ losses_in_overtime }}</strong></p>
+    <p>Доля таких поражений: <strong>{{ favorite_overtime_loss_share }}%</strong></p>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Результативность в ОТ и буллитах</h3>
+    <table class="table-auto border-collapse border border-gray-400 text-sm">
+      <thead>
+        <tr>
+          <th class="border p-1">Тип</th>
+          <th class="border p-1">Победы</th>
+          <th class="border p-1">Поражения</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="border p-1">Овертайм</td>
+          <td class="border p-1">{{ ot_so_results.wins_ot }}</td>
+          <td class="border p-1">{{ ot_so_results.losses_ot }}</td>
+        </tr>
+        <tr>
+          <td class="border p-1">Буллиты</td>
+          <td class="border p-1">{{ ot_so_results.wins_so }}</td>
+          <td class="border p-1">{{ ot_so_results.losses_so }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-2">III. Анализ ошибок букмекеров и поведенческие паттерны</h2>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Сравнение ожиданий букмекеров и реальных результатов</h3>
+    <p>Средняя ожидаемая вероятность победы: <strong>{{ bookmaker_analysis.avg_expected_win }}%</strong></p>
+    <p>Реальная частота побед: <strong>{{ bookmaker_analysis.real_win_rate }}%</strong></p>
+    <p>На основе <strong>{{ bookmaker_analysis.total_games }}</strong> игр</p>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Серии подряд</h3>
+    <p>Макс. серия побед как аутсайдера: <strong>{{ max_upset_streak }}</strong></p>
+    <p>Макс. серия поражений в роли фаворита: <strong>{{ max_fav_loss_streak }}</strong></p>
+  </div>
+</section>
+
+    <aside class="w-1/3 px-4">
+  <h2 class="text-xl font-semibold mb-4">Team Stats</h2>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Основная статистика команды</h3>
+    <ul class="space-y-1 text-sm">
+      <li>Игр: <strong>{{ game_summary.total_games }}</strong></li>
+      <li>Победы: <strong>{{ game_summary.wins }}</strong></li>
+      <li>Поражения: <strong>{{ game_summary.losses }}</strong></li>
+      <li>Ничьи (в осн. время): <strong>{{ game_summary.draws }}</strong></li>
+    </ul>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Голы</h3>
+    <ul class="space-y-1 text-sm">
+      <li>Заброшенные: <strong>{{ goal_stats.goals_for }}</strong></li>
+      <li>Пропущенные: <strong>{{ goal_stats.goals_against }}</strong></li>
+      <li>Разница шайб: <strong>{{ goal_stats.goal_diff }}</strong></li>
+      <li>Среднее за игру (заброш.): <strong>{{ goal_stats.avg_goals_for }}</strong></li>
+      <li>Среднее за игру (пропущ.): <strong>{{ goal_stats.avg_goals_against }}</strong></li>
+    </ul>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Броски по воротам (SOG)</h3>
+    <ul class="space-y-1 text-sm">
+      <li>Бросков за: <strong>{{ sog_stats.sog_for }}</strong></li>
+      <li>Бросков против: <strong>{{ sog_stats.sog_against }}</strong></li>
+      <li>Среднее за игру (за): <strong>{{ sog_stats.avg_sog_for }}</strong></li>
+      <li>Среднее за игру (против): <strong>{{ sog_stats.avg_sog_against }}</strong></li>
+    </ul>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Вбрасывания</h3>
+    <ul class="space-y-1 text-sm">
+      <li>Средний Win%: <strong>{{ faceoff_stats.avg_faceoff_win_pct }}%</strong></li>
+      <li>На основе <strong>{{ faceoff_stats.total_games }}</strong> игр</li>
+    </ul>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Специальные команды</h3>
+    <ul class="space-y-1 text-sm">
+      <li>Реализация большинства: <strong>{{ special_teams_stats.total_pp_goals }}/{{ special_teams_stats.total_pp_attempts }}</strong> ({{ special_teams_stats.powerplay_pct }}%)</li>
+      <li>Общее PIM: <strong>{{ special_teams_stats.total_pim }}</strong> мин.</li>
+      <li>Среднее PIM за игру: <strong>{{ special_teams_stats.avg_pim_per_game }}</strong> мин.</li>
+    </ul>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Физическая игра</h3>
+    <ul class="space-y-1 text-sm">
+      <li>Силовые приёмы: <strong>{{ hits_blocks_stats.total_hits }}</strong> (среднее: {{ hits_blocks_stats.avg_hits }})</li>
+      <li>Заблокированные броски: <strong>{{ hits_blocks_stats.total_blocks }}</strong> (среднее: {{ hits_blocks_stats.avg_blocks }})</li>
+    </ul>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Серии побед и поражений</h3>
+    <ul class="space-y-1 text-sm">
+      <li>Макс. победная серия: <strong>{{ streaks.max_win_streak }}</strong></li>
+      <li>Макс. серия поражений: <strong>{{ streaks.max_loss_streak }}</strong></li>
+    </ul>
+  </div>
+
+  <div class="mb-4">
+    <h3 class="text-lg font-semibold underline mb-2">Домашние и гостевые игры</h3>
+    <ul class="space-y-1 text-sm">
+      <li>Победы дома: <strong>{{ home_away_stats.home_wins }}</strong></li>
+      <li>Поражения дома: <strong>{{ home_away_stats.home_losses }}</strong></li>
+      <li>Победы в гостях: <strong>{{ home_away_stats.away_wins }}</strong></li>
+      <li>Поражения в гостях: <strong>{{ home_away_stats.away_losses }}</strong></li>
+    </ul>
+  </div>
+</aside>
+  </main>
+</body>
+</html>

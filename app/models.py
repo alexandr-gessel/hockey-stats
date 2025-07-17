@@ -1,0 +1,71 @@
+#app/models.py
+
+from sqlalchemy import Column, Integer, String, Date, Float, Boolean, Text
+from pydantic import BaseModel
+from app.db import Base
+from datetime import date
+
+class Team(Base):
+    __tablename__ = "teams"
+
+    id = Column(Integer, primary_key=True, index=True)
+    abbrev = Column(String, unique=True, nullable=False, index=True)
+    name = Column(String, nullable=False)
+    division = Column(String, nullable=False)
+    conference = Column(String, nullable=False)
+
+class Quotes(Base):
+    __tablename__ = 'odds'
+
+    id = Column(Integer, primary_key=True)
+    name_1 = Column(Text, nullable=False)
+    name_2 = Column(Text, nullable=False)
+    quote_1 = Column(Float, nullable=False)
+    quote_un = Column(Float, nullable=True)
+    quote_2 = Column(Float, nullable=False)
+    spieldate = Column(Date, nullable=False)
+    win = Column(Float, nullable=True)
+    play_off = Column(Boolean, nullable=False)
+    unentschieden = Column(Boolean, nullable=False)
+    note = Column(Text, nullable=True)
+    pre_season = Column(Boolean, nullable=False)
+
+
+class GameShortDTO(BaseModel):
+    id_game: int
+    date: date
+    home_team: str
+    home_team_abbr: str
+    away_team: str
+    away_team_abbr: str
+    score: str
+    note: str
+
+
+class Games(Base):
+    __tablename__ = 'gamecenter'
+
+    id = Column(Integer, primary_key=True)
+    gamedate = Column(Date, nullable=False)
+    starttimeutc = Column(Date, nullable=True)
+    period_number = Column(Integer, nullable=True)
+    hometeam = Column(Text, nullable=False)
+    ht_score = Column(Integer, nullable=True)
+    ht_sog = Column(Integer, nullable=True)
+    ht_faceoffwinningpctg = Column(Integer, nullable=True)
+    ht_powerplayconversion = Column(String, nullable=True)
+    ht_pim = Column(Integer, nullable=True)
+    ht_hits = Column(Integer, nullable=True)
+    ht_blocks = Column(Integer, nullable=True)
+    awayteam = Column(Text, nullable=False)
+    at_score = Column(Integer, nullable=True)
+    at_sog = Column(Integer, nullable=True)
+    at_faceoffwinningpctg = Column(Integer, nullable=True)
+    at_powerplayconversion = Column(String, nullable=True)
+    at_pim = Column(Integer, nullable=True)
+    at_hits = Column(Integer, nullable=True)
+    at_blocks = Column(Integer, nullable=True)
+    period_type = Column(Text, nullable=True)
+    gametype = Column(Integer, nullable=True)
+    json_link = Column(Text, nullable=True)
+    id_game = Column(Integer, nullable=True)

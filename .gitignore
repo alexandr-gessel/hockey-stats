@@ -1,0 +1,8 @@
+.env
+__pycache__/
+first.txt
+run_get_upsets.py
+nhl_showcase_dump.sql
+Team_new.md
+Team_old.md
+Team.md

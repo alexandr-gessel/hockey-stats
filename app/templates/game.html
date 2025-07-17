@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ home_team.name }} vs {{ away_team.name }} — Hockey Stats</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900">
+  <header class="bg-[#F9E76D] text-black">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold">Hockey Stats</h1>
+      <nav>
+        <ul class="flex space-x-6 text-sm font-medium">
+          <li><a href="/" class="hover:underline">Home</a></li>
+          <li><a href="/games" class="hover:underline">Games</a></li>
+          <li><a href="/teams" class="hover:underline">Teams</a></li>
+          <li><a href="/players" class="hover:underline">Players</a></li>
+          <li><a href="/insights" class="hover:underline">Insights</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="h-16 bg-white"></div>
+
+  <main class="max-w-6xl mx-auto px-4 flex gap-8">
+    <section class="w-2/3">
+      <div class="flex items-center justify-between bg-gray-100 rounded-lg p-4 mb-6">
+  <!-- Left side -->
+  <div class="flex items-center gap-2">
+    <div class="h-16 w-2 rounded-l-lg" style="background-color: {{ home_color }}"></div>
+    <img src="/static/logos/{{ home_team.abbrev }}.png" alt="{{ home_team.abbrev }} logo" class="h-10">
+    <div class="ml-2 text-right">
+      <div class="font-semibold">{{ home_team.name }}</div>
+      <div class="text-xs text-gray-600">SOG: {{ match.ht_sog }}</div>
+    </div>
+  </div>
+
+  <!-- Center -->
+  <div class="text-center">
+    <div class="flex items-center justify-center gap-2">
+      <div class="text-3xl font-bold text-gray-600">{{ match.ht_score }}</div>
+      <div class="bg-gray-200 text-xs font-bold rounded px-2 py-1">{{ match.period_type }}</div>
+      <div class="text-3xl font-bold">{{ match.at_score }}</div>
+    </div>
+    <div class="text-xs text-gray-600 mt-1">{{ match.gamedate.strftime('%-d/%-m/%Y') }}</div>
+  </div>
+
+  <!-- Right side -->
+  <div class="flex items-center gap-2">
+    <div class="text-left mr-2">
+      <div class="font-semibold">{{ away_team.name }}</div>
+      <div class="text-xs text-gray-600">SOG: {{ match.at_sog }}</div>
+    </div>
+    <img src="/static/logos/{{ away_team.abbrev }}.png" alt="{{ away_team.abbrev }} logo" class="h-10">
+    <div class="h-16 w-2 rounded-r-lg" style="background-color: {{ away_color }}"></div>
+  </div>
+</div>
+
+      <h3 class="text-lg font-semibold mt-6 mb-2">Linescore</h3>
+<table class="w-full text-sm text-center border border-gray-300">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="border px-2 py-1 text-left">Team</th>
+      <th class="border px-2 py-1">Final Score</th>
+      <th class="border px-2 py-1">Period Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border px-2 py-1 text-left">{{ home_team.name }} ({{ home_team.abbrev }})</td>
+      <td class="border px-2 py-1">{{ match.ht_score }}</td>
+      <td class="border px-2 py-1">{{ match.period_type }}</td>
+    </tr>
+    <tr>
+      <td class="border px-2 py-1 text-left">{{ away_team.name }} ({{ away_team.abbrev }})</td>
+      <td class="border px-2 py-1">{{ match.at_score }}</td>
+      <td class="border px-2 py-1">{{ match.period_type }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="h-10 bg-white"></div>
+
+<div class="flex justify-between items-center mb-2">
+  <img src="/static/logos/{{ home_team.abbrev }}.png" alt="{{ home_team.abbrev }} logo" class="h-8">
+  <span class="text-xl font-bold">Game Stats</span>
+  <img src="/static/logos/{{ away_team.abbrev }}.png" alt="{{ away_team.abbrev }} logo" class="h-8">
+</div>
+
+<div class="grid grid-cols-3 gap-2 text-sm items-center">
+  <!-- Shots on Goal -->
+  <div class="text-right font-bold">{{ match.ht_sog }}</div>
+  <div class="text-center text-gray-700">Shots on Goal</div>
+  <div class="text-left font-bold">{{ match.at_sog }}</div>
+
+  <div class="col-span-3 flex h-2 my-2">
+    <div class="bg-red-600" style="width: {{ (match.ht_sog / (match.ht_sog + match.at_sog) * 100) if (match.ht_sog + match.at_sog) > 0 else 50 }}%"></div>
+    <div class="bg-blue-800" style="width: {{ (match.at_sog / (match.ht_sog + match.at_sog) * 100) if (match.ht_sog + match.at_sog) > 0 else 50 }}%"></div>
+  </div>
+
+  <!-- Face-off % -->
+  <div class="text-right font-bold">{{ match.ht_faceoffwinningpctg }}%</div>
+  <div class="text-center text-gray-700">Face-off %</div>
+  <div class="text-left font-bold">{{ match.at_faceoffwinningpctg }}%</div>
+
+  <div class="col-span-3 flex h-2 my-2">
+    <div class="bg-red-600" style="width: {{ match.ht_faceoffwinningpctg or 50 }}%"></div>
+    <div class="bg-blue-800" style="width: {{ match.at_faceoffwinningpctg or 50 }}%"></div>
+  </div>
+
+ 
+
+  <!-- Penalty Minutes -->
+  <div class="text-right font-bold">{{ match.ht_pim }}</div>
+  <div class="text-center text-gray-700">Penalty Minutes</div>
+  <div class="text-left font-bold">{{ match.at_pim }}</div>
+
+  <div class="col-span-3 flex h-2 my-2">
+    <div class="bg-red-600" style="width: {{ (match.ht_pim / (match.ht_pim + match.at_pim) * 100) if (match.ht_pim + match.at_pim) > 0 else 50 }}%"></div>
+    <div class="bg-blue-800" style="width: {{ (match.at_pim / (match.ht_pim + match.at_pim) * 100) if (match.ht_pim + match.at_pim) > 0 else 50 }}%"></div>
+  </div>
+
+  <!-- Hits -->
+  <div class="text-right font-bold">{{ match.ht_hits }}</div>
+  <div class="text-center text-gray-700">Hits</div>
+  <div class="text-left font-bold">{{ match.at_hits }}</div>
+
+  <div class="col-span-3 flex h-2 my-2">
+    <div class="bg-red-600" style="width: {{ (match.ht_hits / (match.ht_hits + match.at_hits) * 100) if (match.ht_hits + match.at_hits) > 0 else 50 }}%"></div>
+    <div class="bg-blue-800" style="width: {{ (match.at_hits / (match.ht_hits + match.at_hits) * 100) if (match.ht_hits + match.at_hits) > 0 else 50 }}%"></div>
+  </div>
+
+  <!-- Blocked Shots -->
+  <div class="text-right font-bold">{{ match.ht_blocks }}</div>
+  <div class="text-center text-gray-700">Blocked Shots</div>
+  <div class="text-left font-bold">{{ match.at_blocks }}</div>
+
+  <div class="col-span-3 flex h-2 my-2">
+    <div class="bg-red-600" style="width: {{ (match.ht_blocks / (match.ht_blocks + match.at_blocks) * 100) if (match.ht_blocks + match.at_blocks) > 0 else 50 }}%"></div>
+    <div class="bg-blue-800" style="width: {{ (match.at_blocks / (match.ht_blocks + match.at_blocks) * 100) if (match.ht_blocks + match.at_blocks) > 0 else 50 }}%"></div>
+  </div>
+ <!-- Power Play  -->
+  <div class="text-right font-bold">{{ match.ht_powerplayconversion }}</div>
+  <div class="text-center text-gray-700">Power Play </div>
+  <div class="text-left font-bold">{{ match.at_powerplayconversion }}</div>
+
+</div>
+
+
+
+    </section>
+
+    <aside class="w-1/3 pl-8 text-center">
+  <h3 class="text-xl font-semibold mb-4">Teams Form</h3>
+
+  <div class="space-y-6">
+    <div>
+      <img src="/static/logos/{{ home_team.abbrev }}.png" alt="{{ home_team.abbrev }} logo" class="h-8 mx-auto mb-2">
+      <div class="font-bold">{{ home_team.name }}</div>
+      <ul class="text-sm mt-1 ">
+        <li>Last 5: <span class="font-semibold">{{ home_form.results|join(', ') }}</span></li>
+        <li>Avg Goal Diff: <span class="font-semibold">{{ home_form.avg_diff }}</span></li>
+        <li>Streak: <span class="font-semibold">{{ home_form.streak }}</span></li>
+      </ul>
+    </div>
+
+    <div>
+      <img src="/static/logos/{{ away_team.abbrev }}.png" alt="{{ away_team.abbrev }} logo" class="h-8 mx-auto mb-2">
+      <div class="font-bold">{{ away_team.name }}</div>
+      <ul class="text-sm mt-1">
+        <li>Last 5: <span class="font-semibold">{{ away_form.results|join(', ') }}</span></li>
+        <li>Avg Goal Diff: <span class="font-semibold">{{ away_form.avg_diff }}</span></li>
+        <li>Streak: <span class="font-semibold">{{ away_form.streak }}</span></li>
+      </ul>
+    </div>
+  </div>
+</aside>
+  </main>
+</body>
+</html>

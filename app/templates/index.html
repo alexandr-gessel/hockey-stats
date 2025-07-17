@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hockey Stats</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900">
+  <!-- Navigation Bar -->
+  <header class="bg-[#F9E76D] text-black">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold">Hockey Stats</h1>
+      <nav>
+        <ul class="flex space-x-6 text-sm font-medium">
+          <li><a href="/" class="hover:underline font-semibold underline">Home</a></li>
+          <li><a href="/games" class="hover:underline">Games</a></li>
+          <li><a href="/teams" class="hover:underline">Teams</a></li>
+          <li><a href="/players" class="hover:underline">Players</a></li>
+          <li><a href="/insights" class="hover:underline">Insights</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Spacer -->
+  <div class="h-16 bg-white"></div>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 flex gap-8">
+    <!-- Match List -->
+      <section class="w-2/3">
+  <h2 class="text-xl font-semibold mb-4">NHL 2021/2022 — Results, Scores & Historical Stats</h2>
+
+  {% for date, games in matches_by_date %}
+    <table class="w-full text-sm mb-4">
+  <tbody>
+    {% for match in games %}
+    <tr class="hover:bg-yellow-50 transition align-middle">
+      {% if loop.first %}
+      <td class="py-1 pr-2 text-gray-600 font-medium w-24">{{ date.strftime('%d %b %Y') }}</td>
+      {% else %}
+      <td class="py-1 pr-2 w-24"></td>
+      {% endif %}
+
+      <td class="py-1 pr-2 w-48">
+        <div class="flex items-center">
+          <img src="/static/logos/{{ match.home_team_abbr }}.png" alt="{{ match.home_team }}" class="inline h-4 w-4 mr-2">
+          <a href="/game/{{ match.id_game }}" class="hover:underline">{{ match.home_team }}</a>
+        </div>
+      </td>
+
+      <td class="py-1 pr-2 text-center font-semibold text-gray-800 w-16">
+        <a href="/game/{{ match.id_game }}" class="hover:underline">{{ match.score }}</a>
+      </td>
+
+      <td class="py-1 pr-2 w-48">
+        <div class="flex items-center">
+          <img src="/static/logos/{{ match.away_team_abbr }}.png" alt="{{ match.away_team }}" class="inline h-4 w-4 mr-2">
+          <a href="/game/{{ match.id_game }}" class="hover:underline">{{ match.away_team }}</a>
+        </div>
+      </td>
+
+      <td class="py-1 text-xs text-gray-500 w-12">{{ match.note }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+  {% endfor %}
+
+    <div class="flex justify-center items-center space-x-4 my-4">
+    {% if current_page > 1 %}
+      <a href="/?page={{ current_page - 1 }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Previous</a>
+    {% endif %}
+
+    <span class="px-3 py-1 text-gray-700 font-semibold">Page {{ current_page }}</span>
+
+    <a href="/?page={{ current_page + 1 }}" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Next</a>
+  </div>
+  </section>
+
+
+    <!-- Divisions -->
+    <aside class="w-1/3">
+      <h2 class="text-xl font-semibold mb-4">Teams nach Division</h2>
+      <div class="grid grid-cols-2 gap-6">
+        {% for division_name, teams in divisions.items() %}
+        <div>
+          <h4 class="font-semibold text-sm text-gray-700 mb-2">{{ division_name }}</h4>
+          <ul class="text-sm text-gray-800 space-y-1">
+            {% for team in teams %}
+            <li><a href="/team/{{ team.abbr }}" class="hover:underline">{{ team.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endfor %}
+      </div>
+    </aside>
+  </main>
+</body>
+</html>
