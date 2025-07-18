@@ -58,33 +58,44 @@
   </div>
 </div>
 
-      <h3 class="text-lg font-semibold mt-6 mb-2">Linescore</h3>
-<table class="w-full text-sm text-center border border-gray-300">
-  <thead class="bg-gray-100">
-    <tr>
-      <th class="border px-2 py-1 text-left">Team</th>
-      <th class="border px-2 py-1">Final Score</th>
-      <th class="border px-2 py-1">Period Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border px-2 py-1 text-left">{{ home_team.name }} ({{ home_team.abbrev }})</td>
-      <td class="border px-2 py-1">{{ match.ht_score }}</td>
-      <td class="border px-2 py-1">{{ match.period_type }}</td>
-    </tr>
-    <tr>
-      <td class="border px-2 py-1 text-left">{{ away_team.name }} ({{ away_team.abbrev }})</td>
-      <td class="border px-2 py-1">{{ match.at_score }}</td>
-      <td class="border px-2 py-1">{{ match.period_type }}</td>
-    </tr>
-  </tbody>
-</table>
+     <h3 class="text-lg font-semibold mt-6 mb-2 underline">Linescore</h3>
+
+{% if period_scores %}
+  <table class="w-full text-sm text-center border border-gray-300">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="border px-2 py-1 text-left">Team</th>
+        {% for p in period_scores %}
+          <th class="border px-2 py-1">{{ p.period }}{{ 'OT' if p.period > 3 else '' }}</th>
+        {% endfor %}
+        <th class="border px-2 py-1">T</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="border px-2 py-1 text-left">{{ home_team.name }} ({{ home_team.abbrev }})</td>
+        {% for p in period_scores %}
+          <td class="border px-2 py-1">{{ p.home if p.home is not none else '' }}</td>
+        {% endfor %}
+        <td class="border px-2 py-1">{{ match.ht_score }}</td>
+      </tr>
+      <tr>
+        <td class="border px-2 py-1 text-left">{{ away_team.name }} ({{ away_team.abbrev }})</td>
+        {% for p in period_scores %}
+          <td class="border px-2 py-1">{{ p.away if p.away is not none else '' }}</td>
+        {% endfor %}
+        <td class="border px-2 py-1">{{ match.at_score }}</td>
+      </tr>
+    </tbody>
+  </table>
+{% else %}
+  <p class="text-sm text-gray-500">No period data available for this game.</p>
+{% endif %}
 <div class="h-10 bg-white"></div>
 
 <div class="flex justify-between items-center mb-2">
   <img src="/static/logos/{{ home_team.abbrev }}.png" alt="{{ home_team.abbrev }} logo" class="h-8">
-  <span class="text-xl font-bold">Game Stats</span>
+  <span class="text-xl font-bold underline">Game Stats</span>
   <img src="/static/logos/{{ away_team.abbrev }}.png" alt="{{ away_team.abbrev }} logo" class="h-8">
 </div>
 
@@ -146,8 +157,60 @@
   <div class="text-left font-bold">{{ match.at_powerplayconversion }}</div>
 
 </div>
+<div class="h-7 bg-white"></div>
+<h3 class="text-xl font-bold mb-3 text-center underline">Top Players</h3>
 
+<div class="grid grid-cols-2 gap-4">
+  <!-- Home Team Column -->
+  <div>
+    <h4 class="text-center font-semibold mb-2">{{ home_team.name }}</h4>
+    <div class="space-y-2">
+      {% for player in top_players_home.values() if player %}
+        <a href="/player/{{ player.playerid }}" class="flex items-center border rounded p-2 shadow hover:shadow-md transition space-x-2">
+          <img src="https://assets.nhle.com/mugs/nhl/latest/{{ player.playerid }}.png" alt="{{ player.name }}" class="h-10 w-10 rounded-full">
+          <div class="text-left text-xs">
+            <div class="font-bold text-sm">{{ player.name }}</div>
+            <div class="flex space-x-2 mt-1">
+              <div>Pts: {{ player.points or 0 }}</div>
+              <div>TOI: {{ player.toi }}</div>
+            </div>
+            <div class="flex space-x-2">
+              <div>Hits: {{ player.hits or 0 }}</div>
+              <div>Blk: {{ player.blockedshots or 0 }}</div>
+              <div>+/-: {{ player.plusminus if player.plusminus is not none else '—' }}</div>
+              <div>SOG: {{ player.shots or 0 }}</div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
 
+  <!-- Away Team Column -->
+  <div>
+    <h4 class="text-center font-semibold mb-2">{{ away_team.name }}</h4>
+    <div class="space-y-2">
+      {% for player in top_players_away.values() if player %}
+        <a href="/player/{{ player.playerid }}" class="flex items-center border rounded p-2 shadow hover:shadow-md transition space-x-2">
+          <img src="https://assets.nhle.com/mugs/nhl/latest/{{ player.playerid }}.png" alt="{{ player.name }}" class="h-10 w-10 rounded-full">
+          <div class="text-left text-xs">
+            <div class="font-bold text-sm">{{ player.name }}</div>
+            <div class="flex space-x-2 mt-1">
+              <div>Pts: {{ player.points or 0 }}</div>
+              <div>TOI: {{ player.toi }}</div>
+            </div>
+            <div class="flex space-x-2">
+              <div>Hits: {{ player.hits or 0 }}</div>
+              <div>Blk: {{ player.blockedshots or 0 }}</div>
+              <div>+/-: {{ player.plusminus if player.plusminus is not none else '—' }}</div>
+              <div>SOG: {{ player.shots or 0 }}</div>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
 
     </section>
 
@@ -175,6 +238,36 @@
       </ul>
     </div>
   </div>
+    <div class="h-16 bg-white"></div>
+  <h3 class="text-xl font-semibold mb-4 text-center">Goalies</h3>
+
+<div class="space-y-6 text-center">
+  <!-- Home Team Goalies -->
+  {% for goalie in goalies.home %}
+  <a href="/player/{{ goalie.playerid }}" class="block border rounded-lg p-2 shadow hover:shadow-lg transition">
+    <img src="https://assets.nhle.com/mugs/nhl/latest/{{ goalie.playerid }}.png" alt="{{ goalie.name }}" class="h-16 w-16 rounded-full mx-auto mb-2">
+      <div class="font-bold">{{ goalie.name }} ({{ home_team.abbrev }})</div>
+      <ul class="text-sm mt-2 text-left">
+        <li>SV%: <span class="font-semibold">{{ goalie.savepctg or '—' }}</span></li>
+        <li>Goals Against: <span class="font-semibold">{{ goalie.goalsagainst or '—' }}</span></li>
+        <li>TOI: <span class="font-semibold">{{ goalie.toi }}</span></li>
+      </ul>
+    </a>
+  {% endfor %}
+
+  <!-- Away Team Goalies -->
+  {% for goalie in goalies.away %}
+  <a href="/player/{{ goalie.playerid }}" class="block border rounded-lg p-2 shadow hover:shadow-lg transition">
+    <img src="https://assets.nhle.com/mugs/nhl/latest/{{ goalie.playerid }}.png" alt="{{ goalie.name }}" class="h-16 w-16 rounded-full mx-auto mb-2">
+      <div class="font-bold">{{ goalie.name }} ({{ away_team.abbrev }})</div>
+      <ul class="text-sm mt-2 text-left">
+        <li>SV%: <span class="font-semibold">{{ goalie.savepctg or '—' }}</span></li>
+        <li>Goals Against: <span class="font-semibold">{{ goalie.goalsagainst or '—' }}</span></li>
+        <li>TOI: <span class="font-semibold">{{ goalie.toi }}</span></li>
+      </ul>
+    </a>
+  {% endfor %}
+</div>
 </aside>
   </main>
 </body>

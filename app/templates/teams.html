@@ -74,35 +74,35 @@
     <aside class="w-1/3 bg-gray-50 border border-gray-200 rounded-xl p-4 shadow">
       <h2 class="text-xl font-semibold mb-4">Top Teams — Summary</h2>
       <div class="text-gray-700 text-sm">
-        <p class="mb-2">Top-3 by Wins</p>
+        <p class="mb-2 underline">Top-3 by Wins</p>
         <ul class="list-disc ml-5">
           {% for team in top_wins %}
           <li>{{ team.name }} — {{ team.wins }} W</li>
           {% endfor %}
         </ul>
 
-        <p class="mt-4 mb-2">Top-3 by GF/GA Diff</p>
+        <p class="mt-4 mb-2 underline">Top-3 by GF/GA Diff</p>
         <ul class="list-disc ml-5">
           {% for team in top_goal_diff %}
           <li>{{ team.name }} — {{ team.goal_diff }}</li>
           {% endfor %}
         </ul>
 
-        <p class="mt-4 mb-2">Top-3 by Faceoff %</p>
+        <p class="mt-4 mb-2 underline">Top-3 by Faceoff %</p>
         <ul class="list-disc ml-5">
           {% for team in top_faceoff %}
           <li>{{ team.name }} — {{ team.faceoff_pct }}%</li>
           {% endfor %}
         </ul>
 
-        <p class="mt-4 mb-2">Top-3 by Powerplay %</p>
+        <p class="mt-4 mb-2 underline">Top-3 by Powerplay %</p>
         <ul class="list-disc ml-5">
           {% for team in top_powerplay %}
           <li>{{ team.name }} — {{ team.pp_pct }}%</li>
           {% endfor %}
         </ul>
 
-        <p class="mt-4 mb-2">Top-3 by Hits</p>
+        <p class="mt-4 mb-2 underline">Top-3 by Hits</p>
         <ul class="list-disc ml-5">
           {% for team in top_hits %}
           <li>{{ team.name }} — {{ team.hits }}</li>

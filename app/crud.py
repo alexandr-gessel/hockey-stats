@@ -4,7 +4,7 @@ from sqlalchemy.future import select
 from sqlalchemy import or_, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta
-from app.models import Team, Games, Quotes
+from app.models import Team, Games, Quotes, GoalsByPeriod
 
 async def get_team_by_abbrev(db: AsyncSession, abbrev: str):
     result = await db.execute(select(Team).where(Team.abbrev == abbrev))
@@ -70,3 +70,10 @@ async def get_playoff_teams(db: AsyncSession) -> set:
         playoff_teams.add(away)
 
     return playoff_teams
+
+
+async def get_goals_by_game_id(db: AsyncSession, game_id: int) -> GoalsByPeriod | None:
+    result = await db.execute(
+        select(GoalsByPeriod).where(GoalsByPeriod.id_game == game_id)
+    )
+    return result.scalars().first()

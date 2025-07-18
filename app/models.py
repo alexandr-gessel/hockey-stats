@@ -89,3 +89,53 @@ class GoalsByPeriod(Base):
     p6_away = Column(Integer, nullable=True)
     p7_home = Column(Integer, nullable=True)
     p7_away = Column(Integer, nullable=True)
+
+class ForwardsDefense(Base):
+    __tablename__ = "forwards_defense"
+
+    id = Column(Integer, primary_key=True, index=True)
+    gameid = Column(Integer, index=True, nullable=False)
+    hometeam = Column(Boolean, nullable=False)
+    playerid = Column(Integer, nullable=False)
+    sweaternumber = Column(Integer, nullable=True)
+    name = Column(String, nullable=False)
+    position = Column(String, nullable=False)
+    goals = Column(Integer, nullable=True)
+    assists = Column(Integer, nullable=True)
+    points = Column(Integer, nullable=True)
+    plusminus = Column(Integer, nullable=True)
+    pim = Column(Integer, nullable=True)
+    hits = Column(Integer, nullable=True)
+    blockedshots = Column(Integer, nullable=True)
+    powerplaygoals = Column(Integer, nullable=True)
+    powerplaypoints = Column(Integer, nullable=True)
+    shorthandedgoals = Column(Integer, nullable=True)
+    shpoints = Column(Integer, nullable=True)
+    shots = Column(Integer, nullable=True)
+    faceoffs = Column(String, nullable=True)  # дробь вида "8/14"
+    faceoffwinningpctg = Column(Float, nullable=True)
+    toi = Column(String, nullable=True)  # "05:35"
+    powerplaytoi = Column(String, nullable=True)
+    shorthandedtoi = Column(String, nullable=True)
+
+class Goalies(Base):
+    __tablename__ = "goalies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    gameid = Column(Integer, index=True, nullable=False)
+    hometeam = Column(Boolean, nullable=False)
+    playerid = Column(Integer, nullable=False)
+    sweaternumber = Column(Integer, nullable=True)
+    name = Column(String, nullable=False)
+    position = Column(String, nullable=False)
+    evenstrengthshotsagainst = Column(String, nullable=True)  # как "8/10"
+    powerplayshotsagainst = Column(String, nullable=True)
+    shorthandedshotsagainst = Column(String, nullable=True)
+    saveshotsagainst = Column(String, nullable=True)
+    savepctg = Column(Float, nullable=True)
+    evenstrengthgoalsagainst = Column(Integer, nullable=True)
+    powerplaygoalsagainst = Column(Integer, nullable=True)
+    shorthandedgoalsagainst = Column(Integer, nullable=True)
+    pim = Column(Integer, nullable=True)
+    goalsagainst = Column(Integer, nullable=True)
+    toi = Column(String, nullable=True)  # "58:23"

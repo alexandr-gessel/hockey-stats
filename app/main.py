@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils.team_colors import get_team_color
 from app.db import get_db
 from app.crud import (get_team_by_abbrev, get_teams_grouped_by_division, 
-                        get_total_games_by_team, get_game_by_id)
+                        get_total_games_by_team, get_game_by_id, get_goals_by_game_id)
 from app.repositories.team_upset_repository import (get_team_upsets, get_team_upsets_by_stage, get_avg_upset_quote_for_team, 
 								get_team_upsets_with_quote_threshold, get_home_losses_as_favorite )
 
@@ -31,6 +31,8 @@ from app.repositories.insights_summary_table import get_summary_table
 from app.repositories.insights_stage_upsets import get_stage_upsets_summary
 from app.repositories.insights_upset_streaks import get_upset_streaks_summary
 from app.repositories.table_games import get_teams_stats
+from app.repositories.goalies_repository import get_goalies_by_game_id
+from app.repositories.forwards_repository import get_forwards_by_game_id, select_top_players_by_team
 
 
 
@@ -124,6 +126,19 @@ async def read_team(team_abbrev: str, request: Request, db: AsyncSession = Depen
             "correlation_metrics": correlation_metrics, "advanced_ratios": advanced_ratios,}) 
 
 
+def build_period_scores(goals_by_period):
+    periods = []
+    for i in range(1, 8):
+        home = getattr(goals_by_period, f"p{i}_home", None)
+        away = getattr(goals_by_period, f"p{i}_away", None)
+        if home is not None or away is not None:
+            periods.append({
+                "period": i,
+                "home": home,
+                "away": away
+            })
+    return periods
+
 @app.get("/game/{game_id}")
 async def read_game(game_id: int, request: Request, db: AsyncSession = Depends(get_db)):
     match = await get_game_by_id(db, game_id)
@@ -151,6 +166,16 @@ async def read_game(game_id: int, request: Request, db: AsyncSession = Depends(g
         "streak": get_streak(away_games, match.awayteam)
     }
 
+    
+    goals_by_period = await get_goals_by_game_id(db, match.id_game)
+    period_scores = build_period_scores(goals_by_period) if goals_by_period else []
+
+    goalies = await get_goalies_by_game_id(db, match.id_game)
+    forwards = await get_forwards_by_game_id(db, match.id_game)
+    
+    home_top_players = select_top_players_by_team(forwards, is_home=True)
+    away_top_players = select_top_players_by_team(forwards, is_home=False)
+
     return templates.TemplateResponse("game.html", {
         "request": request,
         "match": match,
@@ -160,6 +185,10 @@ async def read_game(game_id: int, request: Request, db: AsyncSession = Depends(g
         "away_form": away_form,
         "home_color": get_team_color(match.hometeam),
         "away_color": get_team_color(match.awayteam),
+        "period_scores": period_scores,
+        "goalies": goalies,
+        "top_players_home": home_top_players,
+        "top_players_away": away_top_players,
     })
 
 @app.get("/insights")
