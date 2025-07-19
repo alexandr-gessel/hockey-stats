@@ -159,3 +159,26 @@ class PlayersSummary(Base):
     faceoffs = Column(Integer, default=0)
     faceoffwinningpctg = Column(Float, default=0.0)
     toi_total = Column(Integer, default=0)  # в секундах!
+
+
+class GoaliesSummary(Base):
+    __tablename__ = "goalies_summary"
+
+    id = Column(Integer, primary_key=True, index=True)
+    playerid = Column(Integer, unique=True, index=True, nullable=False)
+    name = Column(String, nullable=False)
+    games_played = Column(Integer, default=0)
+    
+    evenstrengthshotsagainst = Column(Integer, default=0)
+    powerplayshotsagainst = Column(Integer, default=0)
+    shorthandedshotsagainst = Column(Integer, default=0)
+    saveshotsagainst = Column(Integer, default=0)
+    savepctg = Column(Float, default=0.0)
+    
+    evenstrengthgoalsagainst = Column(Integer, default=0)
+    powerplaygoalsagainst = Column(Integer, default=0)
+    shorthandedgoalsagainst = Column(Integer, default=0)
+    
+    goalsagainst = Column(Integer, default=0)
+    pim = Column(Integer, default=0)
+    toi_total = Column(Integer, default=0)  # в секундах!

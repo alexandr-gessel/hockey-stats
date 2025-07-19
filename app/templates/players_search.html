@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4 text-center">Search Results for "{{ query }}"</h1>
+
+<div class="grid grid-cols-3 gap-6">
+  {% for player in players %}
+    <div class="border rounded-lg p-4 shadow">
+      <a href="/player/{{ player.playerid }}">
+        <img src="https://assets.nhle.com/mugs/nhl/2021/11/1296x729/{{ player.playerid }}.jpg" alt="{{ player.name }}">
+        <h2 class="text-lg font-semibold">{{ player.name }}</h2>
+        <p class="text-gray-600">{{ player.position }}</p>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+{% if not players %}
+<p class="text-center text-gray-500 mt-6">No players found.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hockey Stats — Goalies</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900">
+
+  <header class="bg-[#F9E76D] text-black">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold">Hockey Stats</h1>
+      <nav>
+        <ul class="flex space-x-6 text-sm font-medium">
+          <li><a href="/" class="hover:underline ">Home</a></li>
+          <li><a href="/teams" class="hover:underline">Teams</a></li>
+          <li><a href="/players" class="hover:underline">Players</a></li>
+          <li><a href="/goalies" class="hover:underline font-semibold underline">Goalies</a></li>
+          <li><a href="/insights" class="hover:underline ">Insights</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="h-16 bg-white"></div>
+
+  <div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-1 text-center">All Goalies — NHL 2021/2022 Season</h1>
+    <p class="text-center text-sm text-gray-600 mb-4">Complete season stats based on game data</p>
+
+    <div class="mb-6 text-center">
+      <input type="text" id="searchInput" placeholder="Search goalies..."
+             class="border rounded p-2 w-1/2 text-sm" onkeyup="filterGoalies()" />
+    </div>
+
+    <div id="goaliesGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    {% for goalie in goalies %}
+      <a href="/goalie/{{ goalie.playerid }}" 
+         class="flex items-center border rounded-xl p-3 shadow hover:shadow-lg hover:bg-gray-100 transition space-x-3">
+        <div class="flex-shrink-0 transition-transform duration-200 transform hover:scale-110">
+          <img src="https://assets.nhle.com/mugs/nhl/latest/{{ goalie.playerid }}.png"
+               alt="{{ goalie.name }}" class="h-16 w-16 rounded-full">
+        </div>
+        <div class="text-left text-sm">
+          <div class="font-bold text-base">{{ goalie.name }} </div>
+          <div class="flex space-x-2 mt-1">
+            <div>GP: {{ goalie.games_played }}</div>
+            <div>SV%: {{ '{:.3f}'.format(goalie.savepctg) }}</div>
+            <div>GA: {{ goalie.goalsagainst }}</div>
+          </div>
+          <div class="flex space-x-2 mt-1">
+            <div>Saves: {{ goalie.saveshotsagainst }}</div>
+            <div>TOI: {{ (goalie.toi_total // 60) }} min</div>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    function filterGoalies() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('#goaliesGrid a');
+      cards.forEach(card => {
+        const name = card.textContent.toLowerCase();
+        card.style.display = name.includes(input) ? '' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>

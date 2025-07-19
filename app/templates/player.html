@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hockey Stats — Player</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900">
+  <!-- Navigation Bar -->
+  <header class="bg-[#F9E76D] text-black">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold">Hockey Stats</h1>
+      <nav>
+        <ul class="flex space-x-6 text-sm font-medium">
+          <li><a href="/" class="hover:underline">Home</a></li>
+          <li><a href="/teams" class="hover:underline">Teams</a></li>
+          <li><a href="/players" class="hover:underline font-semibold underline">Players</a></li>
+          <li><a href="/goalies" class="hover:underline">Goalies</a></li>
+          <li><a href="/insights" class="hover:underline">Insights</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="h-16 bg-white"></div>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-4 text-center">{{ player.name }} — Player Profile</h1>
+
+    <!-- Player Bio Section -->
+    <div class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+      <img src="https://assets.nhle.com/mugs/actionshots/1296x729/{{ player.playerid }}.jpg" alt="{{ player.name }}" class="w-full md:w-2/3 rounded shadow">
+      <div class="space-y-2 text-sm">
+        <div class="flex items-center space-x-4">
+          <img src="https://assets.nhle.com/mugs/nhl/latest/{{ player.playerid }}.png" alt="{{ player.name }}" class="h-20 w-20 rounded-full border">
+          <div>
+            <div><strong>Position:</strong> {{ player.position }}</div>
+            <div><strong>Height:</strong> {{ bio.Height_cm }} cm</div>
+            <div><strong>Weight:</strong> {{ bio.Weight_kg }} kg</div>
+            <div><strong>Born:</strong> {{ bio.Born }}</div>
+            <div><strong>Birthplace:</strong> {{ bio.Birthplace }}</div>
+            <div><strong>Shoots / Catches:</strong> {{ bio.Shoots or bio.Catches }}</div>
+            <div><strong>Draft:</strong> {{ bio.Draft }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Season Stats -->
+    <h2 class="text-xl font-semibold mt-8 mb-2">2021–22 Season Stats</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+      <div><strong>Games Played:</strong> {{ player.games_played }}</div>
+      <div><strong>Points:</strong> {{ player.points }}</div>
+      <div><strong>Goals:</strong> {{ player.goals }}</div>
+      <div><strong>Assists:</strong> {{ player.assists }}</div>
+      <div><strong>Plus/Minus:</strong> {{ player.plusminus }}</div>
+      <div><strong>Hits:</strong> {{ player.hits }}</div>
+      <div><strong>Shots:</strong> {{ player.shots }}</div>
+      <div><strong>PIM:</strong> {{ player.pim }}</div>
+      <div><strong>Faceoffs:</strong> {{ player.faceoffs }}</div>
+      <div><strong>Faceoff %:</strong> {{ '%.1f'|format(player.faceoffwinningpctg) }}</div>
+      <div><strong>TOI Total:</strong> {{ player.toi_total|int // 60 }} min</div>
+    </div>
+  </main>
+</body>
+</html>

@@ -15,7 +15,7 @@ from app.repositories.insights_summary_table import get_summary_table
 from app.repositories.insights_stage_upsets import get_stage_upsets_summary
 from app.repositories.insights_upset_streaks import get_upset_streaks_summary
 
-from app.routers import game, team, teams
+from app.routers import game, team, teams, players, player, goalies, goalie
 
 app = FastAPI()
 
@@ -25,6 +25,10 @@ templates = Jinja2Templates(directory="app/templates")
 app.include_router(game.router)
 app.include_router(team.router)
 app.include_router(teams.router)
+app.include_router(players.router)
+app.include_router(player.router)
+app.include_router(goalies.router)
+app.include_router(goalie.router)
 
 
 @app.get("/")

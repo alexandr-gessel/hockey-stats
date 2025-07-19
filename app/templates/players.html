@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hockey Stats — Players</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900">
+
+  <!-- Navigation Bar -->
+  <header class="bg-[#F9E76D] text-black">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-lg font-bold">Hockey Stats</h1>
+      <nav>
+        <ul class="flex space-x-6 text-sm font-medium">
+          <li><a href="/" class="hover:underline ">Home</a></li>
+          <li><a href="/teams" class="hover:underline">Teams</a></li>
+          <li><a href="/players" class="hover:underline font-semibold underline">Players</a></li>
+          <li><a href="/goalies" class="hover:underline">Goalies</a></li>
+          <li><a href="/insights" class="hover:underline ">Insights</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Spacer -->
+  <div class="h-16 bg-white"></div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold mb-1 text-center">All Players — NHL 2021/2022 Season</h1>
+<p class="text-center text-sm text-gray-600 mb-4">Complete season stats based on game data</p>
+
+    <!-- Search -->
+    <div class="mb-6 text-center">
+      <input type="text" id="searchInput" placeholder="Search players..."
+             class="border rounded p-2 w-1/2 text-sm" onkeyup="filterPlayers()" />
+    </div>
+
+    <!-- Players Grid -->
+    <div id="playersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+  {% for player in players %}
+    <a href="/player/{{ player.playerid }}"
+       class="flex items-center border rounded-xl p-3 shadow hover:shadow-lg hover:bg-gray-100 transition space-x-3">
+      <div class="flex-shrink-0 transition-transform duration-200 transform hover:scale-110">
+        <img src="https://assets.nhle.com/mugs/nhl/latest/{{ player.playerid }}.png"
+             alt="{{ player.name }}" class="h-16 w-16 rounded-full">
+      </div>
+      <div class="text-left text-sm">
+        <div class="font-bold text-base">{{ player.name }} — {{ player.position }}</div>
+        <div class="flex space-x-2 mt-1">
+          <div>GP: {{ player.games_played }}</div>
+          <div>Pts: {{ player.points }}</div>
+          <div>+/-: {{ player.plusminus }}</div>
+        </div>
+        <div class="flex space-x-2 mt-1">
+          <div>Hits: {{ player.hits }}</div>
+          <div>Blk: {{ player.blockedshots }}</div>
+          <div>TOI: {{ (player.toi_total // 60) }} min</div>
+        </div>
+      </div>
+    </a>
+  {% endfor %}
+</div>
+  </div>
+
+  <script>
+    function filterPlayers() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('#playersGrid a');
+      cards.forEach(card => {
+        const name = card.textContent.toLowerCase();
+        card.style.display = name.includes(input) ? '' : 'none';
+      });
+    }
+  </script>
+
+</body>
+</html>
