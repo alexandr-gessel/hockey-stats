@@ -8,3 +8,12 @@ Team_old.md
 Team.md
 .DS_Store
 .venv/
+game-detail-readme.md
+game-detail.md
+main_.py
+Players-Goalies-README.md
+teams.md
+test_update_team.py
+update_all_teams.py
+test_update_team_analytics.py
+update_all_team_analytics.py

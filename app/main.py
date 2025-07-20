@@ -32,15 +32,28 @@ app.include_router(goalie.router)
 
 
 @app.get("/")
-async def index(request: Request, page: int = 1, db: AsyncSession = Depends(get_db)):
+async def index(
+    request: Request,
+    page: int = 1,
+    search_team: str = "",
+    search_date: str = "",
+    db: AsyncSession = Depends(get_db)
+):
     offset = (page - 1) * 20
-    grouped_matches = await get_games_grouped_by_date_with_cutoff(20, offset=offset)
+    matches_by_date = await get_games_grouped_by_date_with_cutoff(
+        limit=20,
+        offset=offset,
+        search_team=search_team,
+        search_date=search_date
+    )
     divisions = await get_teams_grouped_by_division(db)
     return templates.TemplateResponse("index.html", {
         "request": request,
-        "matches_by_date": grouped_matches,
+        "matches_by_date": matches_by_date,
         "divisions": divisions,
         "current_page": page,
+        "search_team": search_team,
+        "search_date": search_date,
     })
 
 

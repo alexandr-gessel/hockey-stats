@@ -29,18 +29,19 @@
   
   <div class="mb-4">
     <h2 class="text-2xl font-bold mb-1">{{ team.name }} ({{ team.abbrev }}) — NHL 2021/2022 Team Overview</h2>
-    <div class="flex items-center text-gray-700 text-sm space-x-4">
+         <div class="flex items-center text-gray-700 text-sm space-x-4">
       <span><strong>Division:</strong> {{ team.division|capitalize }}</span>
       <span><strong>Conference:</strong> {{ team.conference|capitalize }}</span>
     </div>
   </div>
+<div class="h-4 bg-white"></div>
 
   
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-sm">
 
     <!-- Левая колонка -->
     <section class="space-y-3">
-      <h2 class="text-base font-semibold underline">Апсеты команды {{ team.name }}</h2>
+      <h2 class="text-base font-semibold underline">Апсеты команды</h2>
       <p>Победы как аутсайдер: <strong>{{ num_upsets }}</strong></p>
       <p>Всего матчей: <strong>{{ total_games }}</strong></p>
       <p>Доля апсетов: <strong>{{ upset_share }}%</strong></p>
@@ -99,7 +100,7 @@
       <p><strong>Серии апсетов:</strong> макс. подряд — {{ max_upset_streak }}</p>
       <p><strong>Серии поражений фаворита:</strong> макс. подряд — {{ max_fav_loss_streak }}</p>
       <div class="h-4 bg-white"></div>
-      <h3 class="font-semibold italic mt-2">Показатели эффективности</h3>
+      <h3 class="font-semibold italic mt-2 underline">Показатели эффективности</h3>
         <ul class="list-disc list-inside space-y-1">
           <li>Shot Conversion Rate: <strong>{{ advanced_ratios.shot_conversion }}%</strong></li>
           <li>Победы при Win% &gt; 50% Faceoff: <strong>{{ advanced_ratios.faceoff_win_impact }}%</strong></li>
@@ -123,12 +124,14 @@
         <li>Заброшено: <strong>{{ goal_stats.goals_for }}</strong></li>
         <li>Пропущено: <strong>{{ goal_stats.goals_against }}</strong></li>
         <li>Разница: <strong>{{ goal_stats.goal_diff }}</strong></li>
+        <li>Среднее за игру (заброш.): <strong>{{ goal_stats.avg_goals_for }}</strong></li>
+      <li>Среднее за игру (пропущ.): <strong>{{ goal_stats.avg_goals_against }}</strong></li>
       </ul>
 
       <h3 class="font-semibold underline">Броски</h3>
       <ul class="list-disc list-inside">
-        <li>За: <strong>{{ sog_stats.sog_for }}</strong></li>
-        <li>Против: <strong>{{ sog_stats.sog_against }}</strong></li>
+        <li>За: <strong>{{ sog_stats.sog_for }}</strong> (ср. {{  sog_stats.avg_sog_for }})</li>
+        <li>Против: <strong>{{ sog_stats.sog_against }}</strong> (ср. {{  sog_stats.avg_sog_against }})</li>
       </ul>
 
       <h3 class="font-semibold underline">Вбрасывания</h3>

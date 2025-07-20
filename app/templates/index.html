@@ -31,6 +31,12 @@
     <!-- Match List -->
       <section class="w-2/3">
   <h2 class="text-xl font-semibold mb-4">NHL 2021/2022 — Results, Scores & Historical Stats</h2>
+  <form method="get" action="/" class="mb-4 flex items-center space-x-2">
+  <input type="text" name="search_team" placeholder="Search by team..." class="border p-1 text-sm" value="{{ request.query_params.get('search_team', '') }}">
+  <input type="date" name="search_date" min="2021-09-25" max="2022-06-27" class="border p-1 text-sm" value="{{ request.query_params.get('search_date', '') }}">
+  <button type="submit" class="bg-yellow-300 px-2 py-1 text-sm rounded">Search</button>
+  <a href="/" class="bg-gray-200 px-2 py-1 text-sm rounded hover:bg-gray-300">Reset</a>
+</form>
 
   {% for date, games in matches_by_date %}
     <table class="w-full text-sm mb-4">
@@ -67,6 +73,9 @@
   </tbody>
 </table>
   {% endfor %}
+  {% if not matches_by_date %}
+    <p class="text-gray-500 text-sm mt-2">No matches found for your search.</p>
+  {% endif %}
 
     <div class="flex justify-center items-center space-x-4 my-4">
     {% if current_page > 1 %}
@@ -86,7 +95,7 @@
       <div class="grid grid-cols-2 gap-6">
         {% for division_name, teams in divisions.items() %}
         <div>
-          <h4 class="font-semibold text-sm text-gray-700 mb-2">{{ division_name }}</h4>
+          <h4 class="font-semibold text-sm text-gray-700 mb-2 underline">{{ division_name }}</h4>
           <ul class="text-sm text-gray-800 space-y-1">
             {% for team in teams %}
             <li><a href="/team/{{ team.abbr }}" class="hover:underline">{{ team.name }}</a></li>

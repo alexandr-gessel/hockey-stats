@@ -38,18 +38,27 @@ async def get_games(limit: int = 20, offset: int = 0):
         return games_list
 
 
-async def get_games_grouped_by_date_with_cutoff(limit: int = 20, offset: int = 0):
-    games = await get_games(limit=500, offset=offset)  # загружаем "с запасом"
-    
-    grouped = defaultdict(list)
+async def get_games_grouped_by_date_with_cutoff(limit: int = 20, offset: int = 0, search_team: str = "", search_date: str = ""):
+    games = await get_games(limit=500, offset=offset)  # Загружаем с запасом
+
+    filtered = []
     for game in games:
+        if search_team:
+            if search_team.lower() not in game["home_team"].lower() and search_team.lower() not in game["away_team"].lower():
+                continue
+        if search_date:
+            if game["date"].strftime("%Y-%m-%d") != search_date:
+                continue
+        filtered.append(game)
+
+    grouped = defaultdict(list)
+    for game in filtered:
         grouped[game["date"]].append(game)
 
     grouped_sorted = sorted(grouped.items(), key=lambda x: x[0], reverse=True)
 
     result = []
     total_games = 0
-
     for date, games_list in grouped_sorted:
         result.append((date, games_list))
         total_games += len(games_list)
