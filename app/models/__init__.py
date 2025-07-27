@@ -10,6 +10,8 @@ from .gameshortdto import GameShortDTO
 from .forwardsdefense import ForwardsDefense
 from .playerssummary import PlayersSummary
 from .team_analytics import TeamAnalytics
+from .upset import Upset
+from .team_overtime import TeamOvertimeStats
 
 __all__ = [
     'Goalies',
@@ -21,5 +23,7 @@ __all__ = [
     'GameShortDTO',
     'ForwardsDefense',
     'PlayersSummary',
-    'TeamAnalytics'
+    'TeamAnalytics',
+    'Upset',
+    'TeamOvertimeStats'
 ]

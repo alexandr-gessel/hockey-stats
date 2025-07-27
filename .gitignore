@@ -17,3 +17,13 @@ test_update_team.py
 update_all_teams.py
 test_update_team_analytics.py
 update_all_team_analytics.py
+INSIGHTS_OVERVIEW.md
+test_update_team_upset.py
+update_all_upsets.py
+goalies_summary_dump.sql
+goalsbyperiod_dump.sql
+players_summary_dump.sql
+teams_dump.sql
+models_old.py
+team_overtime_stats_dump.sql
+index-README.md

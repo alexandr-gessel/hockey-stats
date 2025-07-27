@@ -1,68 +1,56 @@
-# repositories/games.py
+# app/repositories/games.py
 
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+import json
+from pathlib import Path
 from collections import defaultdict
-from app.models import Games
-from app.db import async_session
-from app.crud import get_team_by_abbrev
-from app.models import GameShortDTO 
+from datetime import datetime
 
-async def get_games(limit: int = 20, offset: int = 0):
-    async with async_session() as session:
-        result = await session.execute(
-            select(Games)
-            .order_by(Games.gamedate.desc())
-            .limit(limit)
-            .offset(offset)
-        )
-        rows = result.scalars().all()
+def load_all_games():
+    path = Path("app/static/data/games.json")
+    return json.loads(path.read_text())
 
-        games_list = []
-        for game in rows:
-            home_team_obj = await get_team_by_abbrev(session, game.hometeam)
-            away_team_obj = await get_team_by_abbrev(session, game.awayteam)
+def get_games(limit=20, offset=0):
+    all_games = load_all_games()
+    return all_games[offset : offset + limit]
 
-            dto = GameShortDTO(
-				    id_game=game.id_game,
-				    date=game.gamedate,
-				    home_team=home_team_obj.name if home_team_obj else game.hometeam,
-				    home_team_abbr=game.hometeam,
-				    away_team=away_team_obj.name if away_team_obj else game.awayteam,
-				    away_team_abbr=game.awayteam,
-				    score=f"{game.ht_score} – {game.at_score}" if game.ht_score is not None and game.at_score is not None else "–",
-				    note=game.period_type or ""
-				)
-            games_list.append(dto.dict())
+def get_games_grouped_by_date_with_cutoff(limit=20, offset=0, search_team="", search_date="", check_next_page=True):
+    games = load_all_games()  # Чтение всех игр сразу
 
-        return games_list
-
-
-async def get_games_grouped_by_date_with_cutoff(limit: int = 20, offset: int = 0, search_team: str = "", search_date: str = ""):
-    games = await get_games(limit=500, offset=offset)  # Загружаем с запасом
-
+    
     filtered = []
     for game in games:
         if search_team:
             if search_team.lower() not in game["home_team"].lower() and search_team.lower() not in game["away_team"].lower():
                 continue
         if search_date:
-            if game["date"].strftime("%Y-%m-%d") != search_date:
+            if datetime.strptime(game["date"], "%Y-%m-%d").strftime("%Y-%m-%d") != search_date:
                 continue
         filtered.append(game)
 
+    
     grouped = defaultdict(list)
     for game in filtered:
         grouped[game["date"]].append(game)
 
     grouped_sorted = sorted(grouped.items(), key=lambda x: x[0], reverse=True)
 
+    
     result = []
-    total_games = 0
-    for date, games_list in grouped_sorted:
-        result.append((date, games_list))
-        total_games += len(games_list)
-        if total_games >= limit:
-            break
+    total = 0
+    i = offset 
+    while i < len(grouped_sorted) and total < limit:
+        date, games_on_date = grouped_sorted[i]
+        result.append((date, games_on_date))
+        total += len(games_on_date)
+        i += 1
 
-    return result
+    
+    has_next_page = False
+    if check_next_page:
+        while i < len(grouped_sorted):
+            if grouped_sorted[i][1]:
+                has_next_page = True
+                break
+            i += 1
+
+    return result, has_next_page

@@ -1,0 +1,102 @@
+{
+  "upset_win": {
+    "de": "Spiele, bei denen das Team laut Quoten kein Favorit war (mind. 25% höhere Quote)",
+    "en": "Games where the team was not favored based on odds (at least 25% higher odds)"
+  },
+  "avg_upset_quote": {
+    "de": "Durchschnittliche Wettquote bei gewonnenen Spielen als Außenseiter",
+    "en": "Average betting odds in won games where the team was underdog"
+  },
+  "threshold_upsets": {
+    "de": "Anzahl der Siege mit Quote größer als 2.5",
+    "en": "Number of wins where the odds were greater than 2.5"
+  },
+  "home_fav_losses": {
+    "de": "Spiele, in denen das Team zuhause verlor, obwohl es Favorit war",
+    "en": "Games lost at home despite being the favorite"
+  },
+  "faceoff_win_in_wins": {
+    "de": "Durchschnittlich gewonnene Faceoffs (Einwurfduelle) in Spielen, die das Team gewonnen hat.",
+    "en": "Average faceoffs won in games the team won."
+  },
+  "faceoff_win_in_losses": {
+    "de": "Durchschnittlich gewonnene Faceoffs in verlorenen Spielen.",
+    "en": "Average faceoffs won in games the team lost."
+  },
+  "shot_goal_corr": {
+    "de": "Korrelationswert zwischen Anzahl der Schüsse und erzielten Toren (−1 bis +1).",
+    "en": "Correlation coefficient between number of shots and goals scored (−1 to +1)."
+  },
+  "pim_in_wins": {
+    "de": "Ø Strafminuten pro Spiel bei gewonnenen Spielen.",
+    "en": "Average penalty minutes per game in wins."
+  },
+  "pim_in_losses": {
+    "de": "Ø Strafminuten pro Spiel bei Niederlagen.",
+    "en": "Average penalty minutes per game in losses."
+  },
+  "pp_conversion_win_rate": {
+    "de": "Anteil der gewonnenen Spiele mit mindestens einem erfolgreichen Powerplay-Tor.",
+    "en": "Share of games won with at least one successful powerplay goal."
+  },
+  "draw_games": {
+    "de": "Unentschieden nach 60 Minuten (reguläre Spielzeit), unabhängig vom späteren Ausgang.",
+    "en": "Games tied after 60 minutes (before overtime/shootout)."
+  },
+  "overtime_upset_share": {
+    "de": "Anteil der Siege in OT/SO, bei denen das Team Außenseiter war.",
+    "en": "Share of OT/SO wins where the team was the underdog."
+  },
+  "favorite_overtime_loss_share": {
+    "de": "Anteil der Niederlagen in OT/SO, bei denen das Team Favorit war.",
+    "en": "Share of OT/SO losses where the team was the favorite."
+  },
+  "avg_expected_win": {
+    "de": "Durchschnittlich erwartete Gewinnwahrscheinlichkeit laut Buchmacher-Quoten.",
+    "en": "Average expected win probability based on bookmaker odds."
+  },
+  "real_win_rate": {
+    "de": "Tatsächlicher Anteil gewonnener Spiele bei diesen Quoten.",
+    "en": "Actual win rate for games in that odds range."
+  },
+  "shot_conversion": {
+    "de": "Anteil der Schüsse, die zu Toren führen (Tore/Schüsse).",
+    "en": "Ratio of goals to shots on goal (goals/shots)."
+  },
+  "faceoff_win_impact": {
+    "de": "Siegquote in Spielen, in denen das Team mehr als 50 % der Faceoffs gewann.",
+    "en": "Win rate in games with over 50% faceoff wins."
+  },
+  "hit_to_goal": {
+    "de": "Verhältnis von Checks (Hits) zu erzielten Toren.",
+    "en": "Ratio of body checks (hits) to goals scored."
+  },
+  "block_to_shot": {
+    "de": "Verhältnis von geblockten Schüssen zu gegnerischen Schüssen.",
+    "en": "Ratio of blocked shots to shots against."
+  },
+  "goal_diff": {
+    "de": "Differenz zwischen erzielten und kassierten Toren.",
+    "en": "Difference between goals for and goals against."
+  },
+  "sog_for": {
+    "de": "Anzahl der Torschüsse des Teams in allen Spielen.",
+    "en": "Total shots on goal made by the team."
+  },
+  "avg_faceoff_win_pct": {
+    "de": "Durchschnittlicher Prozentsatz gewonnener Bullys (Faceoffs).",
+    "en": "Average percentage of faceoffs won."
+  },
+  "powerplay_pct": {
+    "de": "Erfolgsquote bei Powerplays: Tore geteilt durch Versuche.",
+    "en": "Power play success rate: goals divided by attempts."
+  },
+  "avg_pim_per_game": {
+    "de": "Durchschnittliche Strafminuten pro Spiel.",
+    "en": "Average penalty minutes per game."
+  },
+  "avg_hits": {
+    "de": "Durchschnittliche Anzahl an Checks (körperliche Angriffe) pro Spiel.",
+    "en": "Average number of hits (body checks) per game."
+  }
+}

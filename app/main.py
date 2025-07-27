@@ -35,12 +35,12 @@ app.include_router(goalie.router)
 async def index(
     request: Request,
     page: int = 1,
-    search_team: str = "",
+    search_team: str = "", 
     search_date: str = "",
     db: AsyncSession = Depends(get_db)
 ):
     offset = (page - 1) * 20
-    matches_by_date = await get_games_grouped_by_date_with_cutoff(
+    matches_by_date, has_next_page =  get_games_grouped_by_date_with_cutoff(
         limit=20,
         offset=offset,
         search_team=search_team,
@@ -54,18 +54,19 @@ async def index(
         "current_page": page,
         "search_team": search_team,
         "search_date": search_date,
+        "has_next_page": has_next_page,
     })
 
 
 @app.get("/insights")
 async def insights_page(request: Request, db: AsyncSession = Depends(get_db)):
-    upsets_data = await get_team_upsets_summary()
-    home_upsets_data = await get_home_upsets_summary()
-
-    top7_upsets = sorted(upsets_data, key=lambda x: x['upset_rate'], reverse=True)[:7]
-    top7_home_upsets = sorted(home_upsets_data, key=lambda x: x['home_upset_rate'], reverse=True)[:7]
-
+    
     summary_table = await get_summary_table()
+
+    top7_upsets = sorted(summary_table, key=lambda x: x['upset_rate'], reverse=True)[:7]
+    top7_home_upsets = sorted(summary_table, key=lambda x: x['home_upset_rate'], reverse=True)[:7]
+
+    
     stage_upsets = await get_stage_upsets_summary()
     upset_streaks = await get_upset_streaks_summary()
 

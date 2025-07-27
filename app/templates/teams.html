@@ -59,8 +59,8 @@
           <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.ties }}</span></td>
           <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.goals_for }}/{{ team.goals_against }}</span></td>
           <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.sog_for }}/{{ team.sog_against }}</span></td>
-          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.faceoff_pct }}%</span></td>
-          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.pp_pct }}%</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.faceoff_pct | round(2) }}%</span></td>
+          <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.pp_pct | round(2) }}%</span></td>
           <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.pim }}</span></td>
           <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.hits }}</span></td>
           <td class="py-1 px-2 text-center"><span class="group-hover:underline">{{ team.blocks }}</span></td>
@@ -91,14 +91,14 @@
         <p class="mt-4 mb-2 underline">Top-3 by Faceoff %</p>
         <ul class="list-disc ml-5">
           {% for team in top_faceoff %}
-          <li>{{ team.name }} — {{ team.faceoff_pct }}%</li>
+          <li>{{ team.name }} — {{ team.faceoff_pct | round(2) }}%</li>
           {% endfor %}
         </ul>
 
         <p class="mt-4 mb-2 underline">Top-3 by Powerplay %</p>
         <ul class="list-disc ml-5">
           {% for team in top_powerplay %}
-          <li>{{ team.name }} — {{ team.pp_pct }}%</li>
+          <li>{{ team.name }} — {{ team.pp_pct  | round(2) }}%</li>
           {% endfor %}
         </ul>
 

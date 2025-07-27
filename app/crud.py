@@ -6,6 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta
 from app.models import Team, Games, Quotes, GoalsByPeriod
 
+async def get_teams(db: AsyncSession):
+    result = await db.execute(select(Team).order_by(Team.abbrev))
+    return result.scalars().all()
+
 async def get_team_by_abbrev(db: AsyncSession, abbrev: str):
     result = await db.execute(select(Team).where(Team.abbrev == abbrev))
     return result.scalars().first()
@@ -22,6 +26,10 @@ async def get_teams_grouped_by_division(db: AsyncSession):
         divisions[division].append({"name": team.name, "abbr": team.abbrev})
     
     return divisions
+
+async def get_all_teams_stats(db: AsyncSession):
+    result = await db.execute(select(Team))
+    return result.scalars().all()
 
 
 async def get_total_games_by_team(db: AsyncSession, team_abbrev: str) -> int:
