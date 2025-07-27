@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+jinja2
+sqlalchemy
+asyncpg
+pandas
+httpx
+playwright
+aiofiles
+python-dotenv
