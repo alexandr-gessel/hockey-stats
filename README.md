@@ -73,4 +73,4 @@ Die Anwendung lädt vorberechnete Tabellen für Upsets, Teamstatistiken und Spie
 ---
 
 **📍 Vollständige Kontextseite und Projektreflexion:**  
-[https://pythia.one/eishockey](https://pythia.one/eishockey.html)
+[https://pythia.one/hockey](https://pythia.one/hockey.html)
