@@ -1,5 +1,7 @@
 FROM python:3.12-slim
 
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
 RUN apt-get update && apt-get install -y \
     curl \
     git \
