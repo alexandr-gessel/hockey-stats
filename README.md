@@ -5,7 +5,7 @@
 Dieses Projekt basiert auf Modulen meiner früheren Arbeit bei [DryShaft Data Lab](https://dryshaft.net) und dient als technisches Showcase zur Analyse von Eishockeydaten. Es kombiniert Spielstatistiken, Quotenanalysen und Spielerbiografien in einem modularen Web-Interface.
 
 - **Projektbeschreibung:** [pythia.one/hockey](https://pythia.one/hockey.html)
-- **Live-Demo (bald online):** https://hockey.up.railway.app
+- **Live-Demo:** https://hockey.up.railway.app
 
 ---
 
